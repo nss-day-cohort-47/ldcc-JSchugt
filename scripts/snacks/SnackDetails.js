@@ -4,10 +4,6 @@ export const SnackDetails = (snackObject, toppings) => {
 	for(let i = 1; i < toppings.length; i++){
 		toppingsDisplay += `, ${toppings[i].topping.name}`
 	}
-	// for(const topping of toppings){
-	// 	toppingsDisplay += `${topping.topping.name} ,`
-	// }
-	
 	return `
 	<div class="col">
 		<div class="card shadow-sm" >
