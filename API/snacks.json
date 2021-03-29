@@ -439,6 +439,7 @@
     {
       "name": "jeremiah",
       "email": "j@mail.com",
+      "admin": false,
       "id": 2
     }
   ]

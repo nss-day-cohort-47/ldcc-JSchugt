@@ -1,4 +1,13 @@
-export const SnackDetails = (snackObject) => {
+
+export const SnackDetails = (snackObject, toppings) => {
+	let toppingsDisplay = toppings[0].topping.name
+	for(let i = 1; i < toppings.length; i++){
+		toppingsDisplay += `, ${toppings[i].topping.name}`
+	}
+	// for(const topping of toppings){
+	// 	toppingsDisplay += `${topping.topping.name} ,`
+	// }
+	
 	return `
 	<div class="col">
 		<div class="card shadow-sm" >
@@ -7,7 +16,7 @@ export const SnackDetails = (snackObject) => {
 				<h5 color="primary">${snackObject.name}</h5>
               	<p class="card-text">${snackObject.description}</p>
 				 
-				  <div class="container">
+				  <div class="container" >
 					<div class="row row-cols-2">
 						<div class="col col-details">Type: ${snackObject.type.name}</div>
 						<div class="col col-details">Shape: ${snackObject.shape.name}</div>
@@ -15,7 +24,7 @@ export const SnackDetails = (snackObject) => {
 						<div class="col col-details">Season: ${snackObject.season.name}</div>
 					</div>
 					<div class="row row-cols-1">
-						<div class="col col-details">${snackObject.toppings}</div>
+						<div class="col col-details">${toppingsDisplay}</div>
 					</div>
 				</div>
 			  	
