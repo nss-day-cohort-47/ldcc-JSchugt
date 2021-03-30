@@ -3,12 +3,12 @@ console.log('yum, yum, yum');
 import { LoginForm } from "./auth/LoginForm.js";
 import { RegisterForm } from "./auth/RegisterForm.js";
 import { NavBar } from "./nav/NavBar.js";
-import { SnackList } from "./snacks/SnackList.js";
+import { SnackList,getToppingsList } from "./snacks/SnackList.js";
 import { SnackDetails } from "./snacks/SnackDetails.js";
 import { Footer } from "./nav/Footer.js";
 import {
 	logoutUser, setLoggedInUser, loginUser, registerUser, getLoggedInUser,
-	getSnacks, getSingleSnack, getSnackToppings
+	getSnacks, getSingleSnack, getSnackToppings, getToppings, useToppingsCollection
 } from "./data/apiManager.js";
 
 
@@ -65,18 +65,19 @@ applicationElement.addEventListener("click", event => {
 	if (event.target.id.startsWith("detailscake")) {
 		const snackId = event.target.id.split("__")[1];
 		getSingleSnack(snackId)
-		.then(snackObject => {
-			getSnackToppings(snackId)
-				.then(toppings => {
-					showDetails(snackObject, toppings)})
-})
+			.then(snackObject => {
+				getSnackToppings(snackId)
+					.then(toppings => {
+						showDetails(snackObject, toppings)
+					})
+			})
 	}
 })
 
 
 applicationElement.addEventListener("click", event => {
 	event.preventDefault();
-	if(event.target.id === "addAType"){
+	if (event.target.id === "addAType") {
 		console.log("Adding a type i see")
 	}
 })
@@ -132,6 +133,7 @@ const startLDSnacks = () => {
 	applicationElement.innerHTML += `<div id="mainContent"></div>`;
 	showSnackList();
 	showFooter();
+	getToppingsList();
 
 }
 
