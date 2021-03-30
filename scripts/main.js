@@ -8,7 +8,7 @@ import { SnackDetails } from "./snacks/SnackDetails.js";
 import { Footer } from "./nav/Footer.js";
 import {
 	logoutUser, setLoggedInUser, loginUser, registerUser, getLoggedInUser,
-	getSnacks, getSingleSnack
+	getSnacks, getSingleSnack, getSnackToppings
 } from "./data/apiManager.js";
 
 
@@ -39,7 +39,8 @@ applicationElement.addEventListener("click", event => {
 		//collect all the details into an object
 		const userObject = {
 			name: document.querySelector("input[name='registerName']").value,
-			email: document.querySelector("input[name='registerEmail']").value
+			email: document.querySelector("input[name='registerEmail']").value,
+			admin: false
 		}
 		registerUser(userObject)
 			.then(dbUserObj => {
@@ -61,13 +62,22 @@ applicationElement.addEventListener("click", event => {
 // snack listeners
 applicationElement.addEventListener("click", event => {
 	event.preventDefault();
-
 	if (event.target.id.startsWith("detailscake")) {
 		const snackId = event.target.id.split("__")[1];
 		getSingleSnack(snackId)
-			.then(response => {
-				showDetails(response);
-			})
+		.then(snackObject => {
+			getSnackToppings(snackId)
+				.then(toppings => {
+					showDetails(snackObject, toppings)})
+})
+	}
+})
+
+
+applicationElement.addEventListener("click", event => {
+	event.preventDefault();
+	if(event.target.id === "addAType"){
+		console.log("Adding a type i see")
 	}
 })
 
@@ -78,9 +88,9 @@ applicationElement.addEventListener("click", event => {
 	}
 })
 
-const showDetails = (snackObj) => {
+const showDetails = (snackObj, toppingsArray) => {
 	const listElement = document.querySelector("#mainContent");
-	listElement.innerHTML = SnackDetails(snackObj);
+	listElement.innerHTML = SnackDetails(snackObj, toppingsArray);
 }
 //end snack listeners
 
