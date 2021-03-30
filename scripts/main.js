@@ -8,8 +8,10 @@ import { SnackDetails } from "./snacks/SnackDetails.js";
 import { Footer } from "./nav/Footer.js";
 import {
 	logoutUser, setLoggedInUser, loginUser, registerUser, getLoggedInUser,
-	getSnacks, getSingleSnack, getSnackToppings, getToppings, useToppingsCollection
+	getSnacks, getSingleSnack, getSnackToppings, getToppings, useToppingsCollection,
+	getSnacksByTopping
 } from "./data/apiManager.js";
+
 
 
 
@@ -122,7 +124,12 @@ const showSnackList = () => {
 		listElement.innerHTML = SnackList(allSnacks);
 	})
 }
-
+const showFilteredSnacks = (toppingId) =>{
+	getSnacksByTopping(toppingId).then(filteredSnacks => {
+		const listElement = document.querySelector("#mainContent")
+		listElement.innerHTML = SnackList(filteredSnacks);
+	})
+}
 const showFooter = () => {
 	applicationElement.innerHTML += Footer();
 }
@@ -137,4 +144,11 @@ const startLDSnacks = () => {
 
 }
 
+applicationElement.addEventListener("change", event=>{
+	event.preventDefault()
+	if(event.target.id === "topping-options"){
+		let toppingId = parseInt( event.target.value)
+		showFilteredSnacks(toppingId)
+	}
+})
 checkForUser();
