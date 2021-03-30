@@ -56,17 +56,19 @@ export const useToppingsCollection = () => {
 	return toppingCollection;
 }
 export const useSnackCollection = () => {
-  //Best practice: we don't want to alter the original state, so
-  //make a copy of it and then return it
-  //the spread operator makes quick work
-  const snackCollectionCopy = [...snackCollection]
-  return snackCollectionCopy;
+	//Best practice: we don't want to alter the original state, so
+	//make a copy of it and then return it
+	//the spread operator makes quick work
+	const snackCollectionCopy = [...snackCollection]
+	return snackCollectionCopy;
 }
 export const getToppings = () => {
 	return fetch(`${apiURL}/toppings`)
 		.then(response => response.json())
-		.then(parsedResponse => {toppingsCollection = parsedResponse
-		return parsedResponse})
+		.then(parsedResponse => {
+			toppingsCollection = parsedResponse
+			return parsedResponse
+		})
 
 }
 export const getSnacks = () => {
@@ -80,16 +82,16 @@ export const getSnacks = () => {
 
 export const getSingleSnack = (snackId) => {
 	return fetch(`${apiURL}/snacks/${snackId}?_expand=season&_expand=shape&_expand=type&_expand=inFlavor&_embed=snackToppings`)
-	.then(response => response.json())
+		.then(response => response.json())
 }
 
 export const getSnackToppingDetail = snackId => {
 	return fetch(`${apiURL}/toppings/?id=${snackId}`)
-	.then(resposne => resposne.json())
-	.then(parsedResponse => {
-		console.log(parsedResponse[0].name, "parsedResponse")
-		let name = parsedResponse[0].name
-		return name})
+		.then(resposne => resposne.json())
+		.then(parsedResponse => {
+			let name = parsedResponse[0].name
+			return name
+		})
 }
 
 export const getToppingName = snackId => {
@@ -99,6 +101,33 @@ export const getToppingName = snackId => {
 }
 
 export const getSnackToppings = snackId => {
-	return fetch (`${apiURL}/snackToppings/?snackId=${snackId}&_expand=topping`)
-	.then(response => response.json())
+	return fetch(`${apiURL}/snackToppings/?snackId=${snackId}&_expand=topping`)
+		.then(response => response.json())
+}
+
+
+
+const filterByTopggin = (snackObject, toppingId) => {
+	for (let snack of snackObject) {
+		for (let topping of snack.snackToppings) {
+			if (topping.toppingId === toppingId) {
+				return snackObject
+			}
+		}
+	}
+}
+export const getSnacksByTopping = (toppingId) => {
+	let temp = []
+	return fetch(`${apiURL}/snacks?_embed=snackToppings`)
+		.then(response => response.json())
+		.then(parsedResponse => {
+			for (let snakRe of parsedResponse) {
+				for (let topRe of snakRe.snackToppings) {
+					if (toppingId === topRe.toppingId) {
+						temp.push(snakRe)
+					}
+				}
+			}
+			return temp;
+		})
 }
